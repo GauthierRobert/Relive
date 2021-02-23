@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "amqp.port",
+      "type": "java.lang.String",
+      "description": "Description for amqp.port."
+    },
+    {
+      "name": "amqp.host",
+      "type": "java.lang.String",
+      "description": "Description for amqp.host."
+    }
+  ] }

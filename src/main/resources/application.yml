@@ -1,0 +1,32 @@
+amqp:
+  uri: amqps://b-e1563b4f-cddb-4023-82a7-87299d3adda2.mq.eu-west-3.amazonaws.com:5671
+  username: lifebook.mq
+  password: Aldebaran63!
+
+#DATABASE PostgreSQL
+spring:
+  datasource:
+    url: jdbc:postgresql://lifebook-instance.c1wagot7vqzy.eu-west-3.rds.amazonaws.com:5432/
+    #url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: postgres
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  #JPA
+  jpa:
+    hibernate:
+      #drop n save table again, good for testing, comment this in production
+      #ddl-auto: create-drop
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+amazon:
+  s3:
+    bucket-name: event-image-bucket
+    access-key: AKIAUILXPOEDR5PBDCDZ
+    secret-key: 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
