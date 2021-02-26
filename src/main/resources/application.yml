@@ -1,7 +1,7 @@
 amqp:
-  uri: amqps://b-e1563b4f-cddb-4023-82a7-87299d3adda2.mq.eu-west-3.amazonaws.com:5671
-  username: lifebook.mq
-  password: Aldebaran63!
+  uri: amqp://localhost:5672
+  username: guest
+  password: guest
 
 #DATABASE PostgreSQL
 spring:
@@ -13,6 +13,7 @@ spring:
     hikari:
       connectionTimeout: 20000
       maximumPoolSize: 5
+      auto-commit: false
   #JPA
   jpa:
     hibernate:
