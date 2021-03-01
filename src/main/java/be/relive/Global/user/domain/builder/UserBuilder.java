@@ -1,8 +1,8 @@
 package be.relive.Global.user.domain.builder;
 
-import be.relive.Global.user.domain.FacebookProfile;
 import be.relive.Global.user.domain.Subscription;
 import be.relive.Global.user.domain.User;
+import be.relive.Global.user.domain.facebook.FacebookProfile;
 
 import java.util.ArrayList;
 import java.util.Collection;

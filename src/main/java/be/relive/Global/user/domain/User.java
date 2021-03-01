@@ -1,5 +1,6 @@
 package be.relive.Global.user.domain;
 
+import be.relive.Global.user.domain.facebook.FacebookProfile;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Embedded;

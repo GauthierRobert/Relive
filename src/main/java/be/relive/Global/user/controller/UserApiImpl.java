@@ -2,9 +2,9 @@ package be.relive.Global.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import be.relive.Global.user.domain.FacebookProfile;
 import be.relive.Global.user.domain.Subscription;
 import be.relive.Global.user.domain.User;
+import be.relive.Global.user.domain.facebook.FacebookProfile;
 import be.relive.Global.user.dto.UserDto;
 import be.relive.Global.user.service.FacebookService;
 import be.relive.Global.user.service.SubscriptionService;
@@ -58,7 +58,8 @@ public class UserApiImpl implements UserApi {
             user = userService.save(anUser().withProfile(facebookProfile).build());
         } else if (!user.getProfile().equals(facebookProfile)) {
             user = userService.save(modify(user).withProfile(facebookProfile).build());
-            rabbitTemplate.convertAndSend(userExchange.getName(), "user.updated", convert(user));
+            String jsonUser = new ObjectMapper().writeValueAsString(convert(user));
+            rabbitTemplate.convertAndSend(userExchange.getName(), "user.updated", jsonUser);
         }
 
         return ok().body(convert(user));
@@ -89,14 +90,14 @@ public class UserApiImpl implements UserApi {
     private UserDto convert(User user) {
         return new UserDto(user.getId(),
                 user.getProfile().getName(),
-                user.getProfile().getImageUrl(),
+                user.getProfile().getPicture().getData().getUrl(),
                 user.getSubscriptions().stream().map(Subscription::getKey).collect(Collectors.toList()));
     }
 
     private UserDto convert(User user, String key) {
         return new UserDto(user.getId(),
                 user.getProfile().getName(),
-                user.getProfile().getImageUrl(),
+                user.getProfile().getPicture().getData().getUrl(),
                 Collections.singletonList(key));
     }
 }

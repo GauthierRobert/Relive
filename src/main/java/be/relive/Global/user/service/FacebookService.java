@@ -1,7 +1,7 @@
 package be.relive.Global.user.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import be.relive.Global.user.domain.FacebookProfile;
+import be.relive.Global.user.domain.facebook.FacebookProfile;
 import org.springframework.stereotype.Service;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -13,7 +13,7 @@ import java.net.URL;
 @Service
 public class FacebookService {
 
-    private static final String HTTPS_GRAPH_FACEBOOK = "https://graph.facebook.com/me?access_token=\"";
+    private static final String HTTPS_GRAPH_FACEBOOK = "https://graph.facebook.com/me?fields=id,name,picture&access_token=";
 
     public FacebookProfile getFacebookProfile(String accessToken) throws IOException {
 
