@@ -1,17 +1,13 @@
 package be.relive.Global.user.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import be.relive.Global.dto.UserDto;
+import be.relive.Global.group.service.SubscriberService;
 import be.relive.Global.user.domain.Subscription;
 import be.relive.Global.user.domain.User;
 import be.relive.Global.user.domain.facebook.FacebookProfile;
-import be.relive.Global.user.dto.UserDto;
 import be.relive.Global.user.service.FacebookService;
 import be.relive.Global.user.service.SubscriptionService;
 import be.relive.Global.user.service.UserService;
-import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,21 +26,14 @@ public class UserApiImpl implements UserApi {
     private final FacebookService facebookService;
     private final UserService userService;
     private final SubscriptionService subscriptionService;
-
-    @Qualifier("userExchange")
-    private final TopicExchange userExchange;
-    @Qualifier("subscriptionExchange")
-    private final TopicExchange subscriptionExchange;
-    private final RabbitTemplate rabbitTemplate;
+    private final SubscriberService subscriberService;
 
 
-    public UserApiImpl(FacebookService facebookService, UserService userService, SubscriptionService subscriptionService, TopicExchange userExchange, TopicExchange subscriptionExchange, RabbitTemplate rabbitTemplate) {
+    public UserApiImpl(FacebookService facebookService, UserService userService, SubscriptionService subscriptionService, SubscriberService subscriberService) {
         this.facebookService = facebookService;
         this.userService = userService;
         this.subscriptionService = subscriptionService;
-        this.userExchange = userExchange;
-        this.subscriptionExchange = subscriptionExchange;
-        this.rabbitTemplate = rabbitTemplate;
+        this.subscriberService = subscriberService;
     }
 
     @Override
@@ -58,32 +47,26 @@ public class UserApiImpl implements UserApi {
             user = userService.save(anUser().withProfile(facebookProfile).build());
         } else if (!user.getProfile().equals(facebookProfile)) {
             user = userService.save(modify(user).withProfile(facebookProfile).build());
-            String jsonUser = new ObjectMapper().writeValueAsString(convert(user));
-            rabbitTemplate.convertAndSend(userExchange.getName(), "user.updated", jsonUser);
         }
 
         return ok().body(convert(user));
     }
 
     @Override
-    public ResponseEntity Subscribe(UUID userId, String key) throws JsonProcessingException {
+    public ResponseEntity Subscribe(UUID userId, String key) {
         User user = userService.findById(userId);
         subscriptionService.subscribe(user, key);
 
-        String jsonUser = new ObjectMapper().writeValueAsString(convert(user, key));
+        subscriberService.addSubscriber(convert(user, key));
 
-        rabbitTemplate.convertAndSend(subscriptionExchange.getName(), "group.subscribe", jsonUser);
         return ok().build();
     }
 
     @Override
-    public ResponseEntity unSubscribe(UUID userId, String key) throws JsonProcessingException {
+    public ResponseEntity unSubscribe(UUID userId, String key) {
         User user = userService.findById(userId);
         subscriptionService.unSubscribe(user, key);
-
-        String jsonUser = new ObjectMapper().writeValueAsString(convert(user, key));
-
-        rabbitTemplate.convertAndSend(subscriptionExchange.getName(), "group.unsubscribe", jsonUser);
+        subscriberService.removeSubscriber(convert(user, key));
         return ok().build();
     }
 

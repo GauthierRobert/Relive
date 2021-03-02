@@ -1,6 +1,6 @@
 package be.relive.Global.group.controller;
 
-import be.relive.Global.group.dto.GroupDto;
+import be.relive.Global.dto.GroupDto;
 import be.relive.Global.group.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;

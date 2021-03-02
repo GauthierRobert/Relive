@@ -1,7 +1,7 @@
 package be.relive.Global.group.service;
 
 import be.relive.Global.group.domain.Subscriber;
-import be.relive.Global.group.dto.UserDto;
+import be.relive.Global.dto.UserDto;
 import be.relive.Global.group.repository.GroupRepository;
 import be.relive.Global.group.repository.SubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;

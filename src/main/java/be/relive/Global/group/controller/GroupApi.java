@@ -1,6 +1,6 @@
 package be.relive.Global.group.controller;
 
-import be.relive.Global.group.dto.GroupDto;
+import be.relive.Global.dto.GroupDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

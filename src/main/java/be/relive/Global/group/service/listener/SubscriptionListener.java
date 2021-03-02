@@ -1,7 +1,7 @@
 package be.relive.Global.group.service.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import be.relive.Global.group.dto.UserDto;
+import be.relive.Global.dto.UserDto;
 import be.relive.Global.group.service.SubscriberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

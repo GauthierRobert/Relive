@@ -1,6 +1,6 @@
 package be.relive.Global.group.domain;
 
-import be.relive.Global.group.dto.UserDto;
+import be.relive.Global.dto.UserDto;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;

@@ -1,8 +1,8 @@
 package be.relive.Global.group.service;
 
 import be.relive.Global.group.domain.Group;
-import be.relive.Global.group.dto.GroupDto;
-import be.relive.Global.group.dto.UserDto;
+import be.relive.Global.dto.GroupDto;
+import be.relive.Global.dto.UserDto;
 import be.relive.Global.group.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

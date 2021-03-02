@@ -1,4 +1,4 @@
-package be.relive.Global.group.dto;
+package be.relive.Global.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
