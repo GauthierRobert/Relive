@@ -65,4 +65,8 @@ public class Subscriber {
     public String getCompleteName() {
         return completeName;
     }
+
+    public UUID getUserId() {
+        return userId;
+    }
 }

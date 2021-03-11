@@ -1,8 +1,8 @@
 package be.relive.Global.group.service;
 
-import be.relive.Global.group.domain.Group;
 import be.relive.Global.dto.GroupDto;
 import be.relive.Global.dto.UserDto;
+import be.relive.Global.group.domain.Group;
 import be.relive.Global.group.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class GroupService {
 
     private List<UserDto> getSubscribers(Group group) {
         return group.getSubscribers().stream()
-                .map(subscriber -> new UserDto(subscriber.getCompleteName(), subscriber.getImageUrl()))
+                .map(subscriber -> new UserDto(subscriber.getUserId(), subscriber.getCompleteName(), subscriber.getImageUrl()))
                 .collect(toList());
     }
 

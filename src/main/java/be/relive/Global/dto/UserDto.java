@@ -21,7 +21,8 @@ public class UserDto implements Serializable {
     private UserDto() {
     }
 
-    public UserDto(String completeName, String imageUrl) {
+    public UserDto(UUID id,String completeName, String imageUrl) {
+        this.id = id;
         this.completeName = completeName;
         this.imageUrl = imageUrl;
     }

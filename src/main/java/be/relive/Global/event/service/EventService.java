@@ -36,7 +36,9 @@ public class EventService {
     }
 
     public List<Event> findAllByAttendantId(UUID attendantId) {
-        return eventRepository.findAllByAttendantId(attendantId);
+        return eventRepository.findAllByAttendantId(attendantId).stream()
+                .sorted(Comparator.comparing(Event::getOccurrenceDateTime))
+                .collect(Collectors.toList());
     }
 
     @Transactional

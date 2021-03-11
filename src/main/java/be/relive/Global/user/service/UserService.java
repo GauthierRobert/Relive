@@ -1,5 +1,7 @@
 package be.relive.Global.user.service;
 
+import be.relive.Global.event.repository.AttendantRepository;
+import be.relive.Global.group.repository.SubscriberRepository;
 import be.relive.Global.user.domain.User;
 import be.relive.Global.user.exception.UserNotFoundException;
 import be.relive.Global.user.repository.UserRepository;
@@ -11,9 +13,13 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AttendantRepository attendantRepository;
+    private final SubscriberRepository subscriberRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AttendantRepository attendantRepository, SubscriberRepository subscriberRepository) {
         this.userRepository = userRepository;
+        this.attendantRepository = attendantRepository;
+        this.subscriberRepository = subscriberRepository;
     }
 
     public User findByFacebookId(String facebookId) {
@@ -28,6 +34,9 @@ public class UserService {
 
 
     public User save(User user) {
+        attendantRepository.updateAttendant(user.getId(), user.getProfile().getPicture().getData().getUrl(), user.getProfile().getName());
+        subscriberRepository.updateSubscriber(user.getId(), user.getProfile().getPicture().getData().getUrl(), user.getProfile().getName());
         return userRepository.save(user);
+
     }
 }

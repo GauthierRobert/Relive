@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -113,6 +114,7 @@ public class EventApiImpl implements EventApi {
         Page<Event> eventPage = eventService.findAllByGroupKey(groupKey, paging);
 
         List<EventDto> events = eventPage.stream()
+                .sorted(Comparator.comparing(Event::getOccurrenceDateTime))
                 .map(eventDtoConverter::convert)
                 .collect(Collectors.toList());
 
