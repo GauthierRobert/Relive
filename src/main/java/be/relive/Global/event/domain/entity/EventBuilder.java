@@ -11,6 +11,7 @@ public final class EventBuilder {
     private String place;
     private String description;
     private String title;
+    private String type;
     private UUID id;
     private List<Attendant> attendants = new ArrayList<>();
 
@@ -74,6 +75,15 @@ public final class EventBuilder {
         return this;
     }
 
+    public EventBuilder withType(String type) {
+        if (type != null) {
+            this.type = type;
+        } else{
+            this.type = "default";
+        }
+        return this;
+    }
+
     public EventBuilder withAttendants(List<Attendant> attendants) {
         if (attendants != null) {
             this.attendants = new ArrayList<>(attendants);
@@ -83,6 +93,6 @@ public final class EventBuilder {
 
 
     public Event build() {
-        return new Event(id, groupKey, occurrenceDate, place, description, title, attendants);
+        return new Event(id, groupKey, occurrenceDate, place, description, title, type, attendants);
     }
 }

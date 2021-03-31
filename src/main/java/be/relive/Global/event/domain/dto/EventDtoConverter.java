@@ -16,7 +16,7 @@ public class EventDtoConverter implements Converter<Event, EventDto> {
                 event.getPlace(),
                 event.getDescription(),
                 event.getTitle(),
-                event.getAttendants().stream()
+                event.getType(), event.getAttendants().stream()
                         .map(attendant -> new AttendantDto(attendant.getUserId(), attendant.getCompleteName(), attendant.getImageUrl()))
                         .collect(Collectors.toList())
         );

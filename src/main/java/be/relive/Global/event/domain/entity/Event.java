@@ -45,6 +45,9 @@ public class Event implements Serializable {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "type")
+    private String type;
+
     @OneToMany(mappedBy = "event", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attendant> attendants = new ArrayList<>();
 
@@ -52,13 +55,14 @@ public class Event implements Serializable {
     private Event() {
     }
 
-    Event(UUID id, String groupKey, LocalDateTime localDateTime, String place, String description, String title, List<Attendant> attendants) {
+    Event(UUID id, String groupKey, LocalDateTime localDateTime, String place, String description, String title, String type, List<Attendant> attendants) {
         this.id = id;
         this.groupKey = groupKey;
         this.occurrenceDateTime = localDateTime;
         this.place = place;
         this.description = description;
         this.title = title;
+        this.type = type;
         this.attendants = attendants;
     }
 
@@ -88,5 +92,9 @@ public class Event implements Serializable {
 
     public List<Attendant> getAttendants() {
         return attendants;
+    }
+
+    public String getType() {
+        return type;
     }
 }

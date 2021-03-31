@@ -19,7 +19,8 @@ public class EventConverter implements Converter<EventDto, Event> {
                 .withOccurrenceDate(event.getOccurrenceDate())
                 .withDescription(event.getDescription())
                 .withGroupKey(event.getGroupKey())
-                .withPlace(event.getPlace());
+                .withPlace(event.getPlace())
+                .withType(event.getType());
 
         if (event.getId() != null) {
             eventBuilder.withId(event.getId());
@@ -39,6 +40,7 @@ public class EventConverter implements Converter<EventDto, Event> {
                 .withDescription(event.getDescription())
                 .withGroupKey(event.getGroupKey())
                 .withPlace(event.getPlace())
+                .withType(event.getType())
                 .withId(id);
 
         Event eventEntity = eventBuilder.build();

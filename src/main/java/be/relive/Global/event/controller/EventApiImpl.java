@@ -63,6 +63,7 @@ public class EventApiImpl implements EventApi {
                 .withGroupKey(eventDto.getGroupKey())
                 .withDescription(eventDto.getDescription())
                 .withTitle(eventDto.getTitle())
+                .withType(eventDto.getType())
                 .withOccurrenceDate(eventDto.getOccurrenceDate())
                 .withAttendants(remainingAttendants)
                 .build();

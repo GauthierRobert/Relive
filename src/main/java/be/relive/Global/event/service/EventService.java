@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class EventService {
 
     public List<Event> findAllByAttendantId(UUID attendantId) {
         return eventRepository.findAllByAttendantId(attendantId).stream()
-                .sorted(Comparator.comparing(Event::getOccurrenceDateTime))
+                .sorted(Comparator.comparing(event -> -event.getOccurrenceDateTime().toInstant(ZoneOffset.UTC).toEpochMilli()))
                 .collect(Collectors.toList());
     }
 
@@ -46,17 +47,13 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public Event findById(UUID id){
+    public Event findById(UUID id) {
         return eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException(id));
     }
 
-    public void delete(UUID id){
+    public void delete(UUID id) {
         eventRepository.deleteById(id);
     }
-
-
-
-
 
 
 }

@@ -19,18 +19,21 @@ public class EventDto implements Serializable {
 
     private String title;
 
+    private String type;
+
     private List<AttendantDto> attendants;
 
     private EventDto() {
     }
 
-    public EventDto(UUID id, String groupKey, LocalDateTime occurrenceDate, String place, String description, String title, List<AttendantDto> attendants) {
+    public EventDto(UUID id, String groupKey, LocalDateTime occurrenceDate, String place, String description, String title, String type, List<AttendantDto> attendants) {
         this.id = id;
         this.groupKey = groupKey;
         this.occurrenceDate = occurrenceDate;
         this.place = place;
         this.description = description;
         this.title = title;
+        this.type = type;
         this.attendants = attendants;
     }
 
@@ -60,5 +63,9 @@ public class EventDto implements Serializable {
 
     public List<AttendantDto> getAttendants() {
         return attendants;
+    }
+
+    public String getType() {
+        return type;
     }
 }
