@@ -1,9 +1,14 @@
 package be.relive.Global.event.service;
 
+import be.relive.Global.dto.Notification;
+import be.relive.Global.event.domain.entity.Attendant;
 import be.relive.Global.event.domain.entity.Event;
 import be.relive.Global.event.exception.EventNotFoundException;
 import be.relive.Global.event.repository.EventRepository;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,10 +24,15 @@ import java.util.stream.Collectors;
 public class EventService {
 
     private final EventRepository eventRepository;
+    @Qualifier("notificationExchange")
+    private final TopicExchange notificationExchange;
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, TopicExchange notificationExchange, RabbitTemplate rabbitTemplate) {
         this.eventRepository = eventRepository;
+        this.notificationExchange = notificationExchange;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
 
@@ -44,7 +54,18 @@ public class EventService {
 
     @Transactional
     public Event save(Event event) {
-        return eventRepository.save(event);
+        Notification notification = new Notification("A new event has been created", event.getTitle());
+        notification.getAdditionalProperties().put("attendants", event.getAttendants());
+        Event savedEvent = eventRepository.save(event);
+        String routingKey = "event.creation." + savedEvent.getGroupKey();
+        if(!event.getAttendants().isEmpty()){
+            routingKey = routingKey + event.getAttendants().stream()
+                    .map(Attendant::getUserId)
+                    .map(UUID::toString)
+                    .collect(Collectors.joining("."));
+        }
+        rabbitTemplate.convertAndSend(notificationExchange.getName(), routingKey, notification);
+        return savedEvent;
     }
 
     public Event findById(UUID id) {
