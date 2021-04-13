@@ -1,5 +1,5 @@
 amqp:
-  uri: amqps://b-3ffe4740-866a-4c93-b688-745cc7ff84b3.mq.eu-west-3.amazonaws.com:5671
+  uri: amqps://b-b1af22b3-dbb8-4a37-a285-d87168249d53.mq.eu-west-3.amazonaws.com:5671
   username: relive.mq
   password: Aldebaran63!
 
