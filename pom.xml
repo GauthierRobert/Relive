@@ -51,6 +51,19 @@
 			<artifactId>postgresql</artifactId>
 			<!--<version>(managed by Spring Boot)</version> -->
 		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.github.jav/expo-server-sdk -->
+		<dependency>
+			<groupId>io.github.jav</groupId>
+			<artifactId>expo-server-sdk</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
 	</dependencies>
 
 

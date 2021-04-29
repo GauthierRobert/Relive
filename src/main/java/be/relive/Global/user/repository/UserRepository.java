@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -16,4 +17,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @EntityGraph(attributePaths = {"subscriptions"})
     User findBy(@Param("facebook_id") String facebookId);
 
+    @Query("UPDATE Users u SET u.notificationToken = :notificationToken WHERE u.id = :id")
+    void updateNotificationToken(@Param("id") String id, @Param("notificationToken") String notificationToken);
+
+    @Query("SELECT u.notificationToken FROM Users u WHERE u.id IN :ids")
+    List<String> getNotificationTokens(@Param("ids") List<String> ids);
 }

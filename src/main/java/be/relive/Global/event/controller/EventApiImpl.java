@@ -6,6 +6,7 @@ import be.relive.Global.event.domain.entity.Attendant;
 import be.relive.Global.event.domain.entity.Event;
 import be.relive.Global.event.domain.entity.EventConverter;
 import be.relive.Global.event.service.EventService;
+import io.github.jav.exposerversdk.PushClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +42,7 @@ public class EventApiImpl implements EventApi {
     }
 
     @Override
-    public ResponseEntity update(UUID id, EventDto eventDto) {
+    public ResponseEntity update(UUID id, EventDto eventDto) throws PushClientException {
         Event oldEvent = eventService.findById(id);
         List<Attendant> oldAttendants = oldEvent.getAttendants();
         List<Attendant> remainingAttendants = new ArrayList<>();
@@ -87,7 +88,7 @@ public class EventApiImpl implements EventApi {
     }
 
     @Override
-    public ResponseEntity save(EventDto eventDto) {
+    public ResponseEntity save(EventDto eventDto) throws PushClientException {
         return ok().body(eventDtoConverter.convert(eventService.save(eventConverter.convert(eventDto))));
     }
 

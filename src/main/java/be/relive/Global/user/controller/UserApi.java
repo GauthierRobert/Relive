@@ -12,6 +12,9 @@ import java.util.UUID;
 @RequestMapping(path = "/user", produces = "application/json")
 public interface UserApi {
 
+    @PostMapping(path = "/{userId}/{notificationToken}")
+    ResponseEntity addPushNotificationToken(@PathVariable("userId") UUID userId,  @PathVariable("notificationToken") String notificationToken) throws IOException;
+
     @PostMapping(path = "/{token}")
     ResponseEntity login(@PathVariable("token") String token) throws IOException;
 

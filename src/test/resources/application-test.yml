@@ -1,0 +1,25 @@
+#DATABASE PostgreSQL
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;mode=MySQL
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+
+  #JPA
+  jpa:
+    hibernate:
+      #drop n save table again, good for testing, comment this in production
+      #ddl-auto: create-drop
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+amazon:
+  s3:
+    bucket-name: event-image-bucket
+    access-key: AKIAUILXPOEDR5PBDCDZ
+    secret-key: 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

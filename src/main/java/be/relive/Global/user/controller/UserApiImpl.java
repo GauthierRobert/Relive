@@ -37,6 +37,12 @@ public class UserApiImpl implements UserApi {
     }
 
     @Override
+    public ResponseEntity addPushNotificationToken(UUID userId, String notificationToken) throws IOException {
+        userService.updateNotificationToken(userId, notificationToken);
+        return ok().build();
+    }
+
+    @Override
     public ResponseEntity login(String token) throws IOException {
 
         FacebookProfile facebookProfile = facebookService.getFacebookProfile(token);

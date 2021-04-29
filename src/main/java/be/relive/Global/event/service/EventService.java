@@ -5,10 +5,10 @@ import be.relive.Global.event.domain.entity.Attendant;
 import be.relive.Global.event.domain.entity.Event;
 import be.relive.Global.event.exception.EventNotFoundException;
 import be.relive.Global.event.repository.EventRepository;
-import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import be.relive.Global.event.service.notification.ExpoNotificationService;
+import be.relive.Global.user.repository.UserRepository;
+import io.github.jav.exposerversdk.PushClientException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,22 +17,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class EventService {
 
     private final EventRepository eventRepository;
-    @Qualifier("notificationExchange")
-    private final TopicExchange notificationExchange;
-    private final RabbitTemplate rabbitTemplate;
 
+    private final UserRepository userRepository;
+
+    private final ExpoNotificationService expoNotificationService;
     @Autowired
-    public EventService(EventRepository eventRepository, TopicExchange notificationExchange, RabbitTemplate rabbitTemplate) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository, ExpoNotificationService expoNotificationService) {
         this.eventRepository = eventRepository;
-        this.notificationExchange = notificationExchange;
-        this.rabbitTemplate = rabbitTemplate;
+        this.userRepository = userRepository;
+        this.expoNotificationService = expoNotificationService;
     }
 
 
@@ -43,28 +46,27 @@ public class EventService {
     public List<Event> findAllByGroupKey(String key) {
         return eventRepository.findAllByGroupKey(key).stream()
                 .sorted(Comparator.comparing(Event::getOccurrenceDateTime))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<Event> findAllByAttendantId(UUID attendantId) {
         return eventRepository.findAllByAttendantId(attendantId).stream()
                 .sorted(Comparator.comparing(event -> -event.getOccurrenceDateTime().toInstant(ZoneOffset.UTC).toEpochMilli()))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Transactional
-    public Event save(Event event) {
-        Notification notification = new Notification("A new event has been created", event.getTitle());
-        notification.getAdditionalProperties().put("attendants", event.getAttendants());
+    public Event save(Event event) throws PushClientException {
+
         Event savedEvent = eventRepository.save(event);
-        String routingKey = "event.creation." + savedEvent.getGroupKey();
-        if(!event.getAttendants().isEmpty()){
-            routingKey = routingKey + event.getAttendants().stream()
-                    .map(Attendant::getUserId)
-                    .map(UUID::toString)
-                    .collect(Collectors.joining("."));
+
+        if(event.getId()!=null) {
+            List<String> notificationTokens = userRepository.getNotificationTokens(event.getAttendants().stream()
+                    .map(Attendant::getUserId).map(UUID::toString)
+                    .collect(toList())).stream().filter(Objects::nonNull).collect(toList());
+            expoNotificationService.sendPushNotification(notificationTokens, "A new event has been created", "");
         }
-        rabbitTemplate.convertAndSend(notificationExchange.getName(), routingKey, notification);
+
         return savedEvent;
     }
 

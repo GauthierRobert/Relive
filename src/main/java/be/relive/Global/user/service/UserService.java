@@ -26,10 +26,13 @@ public class UserService {
         return userRepository.findBy(facebookId);
     }
 
+    public void updateNotificationToken(UUID id, String token) {
+        userRepository.updateNotificationToken(id.toString(), token);
+    }
 
-    public User findById(UUID Id) {
-        return userRepository.findById(Id)
-                .orElseThrow(() -> new UserNotFoundException(Id));
+    public User findById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
 

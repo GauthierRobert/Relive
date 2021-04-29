@@ -1,6 +1,7 @@
 package be.relive.Global.event.controller;
 
 import be.relive.Global.event.domain.dto.EventDto;
+import io.github.jav.exposerversdk.PushClientException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +18,13 @@ import java.util.UUID;
 public interface EventApi {
 
     @PutMapping(path = "/event/{id}")
-    ResponseEntity update(@PathVariable("id") UUID id, @RequestBody EventDto eventDto);
+    ResponseEntity update(@PathVariable("id") UUID id, @RequestBody EventDto eventDto) throws PushClientException;
 
     @DeleteMapping(path = "/event/{id}")
     void delete(@PathVariable("id") UUID id);
 
     @PostMapping(path = "/event/")
-    ResponseEntity save(@RequestBody EventDto eventDto);
+    ResponseEntity save(@RequestBody EventDto eventDto) throws PushClientException;
 
     @GetMapping(path = "/group/{groupKey}/event")
     ResponseEntity findByKey(@PathVariable(name = "groupKey") String groupKey,
