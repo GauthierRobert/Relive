@@ -66,7 +66,7 @@ public class EventService {
                     .collect(toList()));
             if(tokens!=null) {
                 List<String> notificationTokens = tokens.stream().filter(Objects::nonNull).collect(toList());
-                expoNotificationService.sendPushNotification(notificationTokens, "A new event has been created", "");
+                expoNotificationService.sendPushNotification(notificationTokens, "A new event has been created", event.getTitle());
             }
         }
 
