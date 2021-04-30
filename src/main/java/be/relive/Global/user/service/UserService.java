@@ -27,7 +27,7 @@ public class UserService {
     }
 
     public void updateNotificationToken(UUID id, String token) {
-        userRepository.updateNotificationToken(id.toString(), token);
+        userRepository.updateNotificationToken(id, token);
     }
 
     public User findById(UUID id) {

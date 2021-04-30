@@ -61,10 +61,13 @@ public class EventService {
         Event savedEvent = eventRepository.save(event);
 
         if(event.getId()!=null) {
-            List<String> notificationTokens = userRepository.getNotificationTokens(event.getAttendants().stream()
-                    .map(Attendant::getUserId).map(UUID::toString)
-                    .collect(toList())).stream().filter(Objects::nonNull).collect(toList());
-            expoNotificationService.sendPushNotification(notificationTokens, "A new event has been created", "");
+            List<String> tokens = userRepository.getNotificationTokens(event.getAttendants().stream()
+                    .map(Attendant::getUserId)
+                    .collect(toList()));
+            if(tokens!=null) {
+                List<String> notificationTokens = tokens.stream().filter(Objects::nonNull).collect(toList());
+                expoNotificationService.sendPushNotification(notificationTokens, "A new event has been created", "");
+            }
         }
 
         return savedEvent;
